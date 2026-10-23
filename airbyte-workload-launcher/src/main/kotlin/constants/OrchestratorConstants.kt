@@ -33,6 +33,7 @@ object OrchestratorConstants {
           EnvVar.JOB_ERROR_REPORTING_SENTRY_DSN,
           EnvVar.JOB_ERROR_REPORTING_STRATEGY,
           EnvVar.MINIO_ENDPOINT,
+          EnvVar.MINIO_REGION,
           EnvVar.PUB_SUB_ENABLED,
           EnvVar.PUB_SUB_TOPIC_NAME,
           EnvVar.STORAGE_BUCKET_ACTIVITY_PAYLOAD,

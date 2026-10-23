@@ -365,6 +365,24 @@ Renders the storage.minio.endpoint environment variable
 {{- end }}
 
 {{/*
+Renders the global.storage.minio.region value
+*/}}
+{{- define "airbyte.storage.minio.region" }}
+    {{- .Values.global.storage.minio.region | default "us-east-1" }}
+{{- end }}
+
+{{/*
+Renders the storage.minio.region environment variable
+*/}}
+{{- define "airbyte.storage.minio.region.env" }}
+- name: MINIO_REGION
+  valueFrom:
+    configMapKeyRef:
+      name: {{ .Release.Name }}-airbyte-env
+      key: MINIO_REGION
+{{- end }}
+
+{{/*
 Renders the global.storage.minio.s3PathStyleAccess value
 */}}
 {{- define "airbyte.storage.minio.s3PathStyleAccess" }}
@@ -412,6 +430,7 @@ Renders the set of all storage environment variables
 {{- include "airbyte.storage.minio.accessKeyId.env" . }}
 {{- include "airbyte.storage.minio.secretAccessKey.env" . }}
 {{- include "airbyte.storage.minio.endpoint.env" . }}
+{{- include "airbyte.storage.minio.region.env" . }}
 {{- include "airbyte.storage.minio.s3PathStyleAccess.env" . }}
 {{- end }}
 
@@ -449,6 +468,7 @@ GCS_CREDENTIALS_SECRET_NAME: {{ include "airbyte.storage.gcs.credentialsSecretNa
 
 {{- if eq $opt "minio" }}
 MINIO_ENDPOINT: {{ include "airbyte.storage.minio.endpoint" . | quote }}
+MINIO_REGION: {{ include "airbyte.storage.minio.region" . | quote }}
 S3_PATH_STYLE_ACCESS: {{ include "airbyte.storage.minio.s3PathStyleAccess" . | quote }}
 {{- end }}
 

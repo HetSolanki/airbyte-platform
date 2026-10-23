@@ -413,6 +413,12 @@ storage:
         - minio
       defaultValueExp: (printf "http://airbyte-minio-svc.%s:9000" (include "airbyte-data-plane.namespace" .))
 
+    - env: MINIO_REGION
+      key: minio.region
+      discriminatorOpts: 
+        - minio
+      defaultValue: us-east-1
+
     - env: S3_PATH_STYLE
       key: minio.s3PathStyleAccess
       discriminatorOpts: 

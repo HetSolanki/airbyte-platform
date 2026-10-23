@@ -139,6 +139,7 @@ internal const val DEFAULT_SHUTDOWN_DELAY_MS = 20000L
 internal const val DEFAULT_SIDECAR_FILE_TIMEOUT_MINUTES = 9
 internal const val DEFAULT_SIDECAR_FILE_TIMEOUT_MINUTES_WITHIN_SYNC = 30
 internal const val DEFAULT_STORAGE_LOCAL_ROOT = "/storage"
+internal const val DEFAULT_STORAGE_MINIO_REGION = "us-east-1"
 internal const val DEFAULT_STORAGE_LOCATION = "airbyte-storage"
 internal const val DEFAULT_STORAGE_REPLICATION_DUMP_LOCATION = "cloud-replication-dump"
 internal const val DEFAULT_TEMPORAL_HOST = "airbyte-temporal:7233"
@@ -1005,9 +1006,10 @@ data class AirbyteStorageConfig(
     val accessKey: String = "",
     val secretAccessKey: String = "",
     val endpoint: String = "",
+    val region: String = DEFAULT_STORAGE_MINIO_REGION,
   ) : StorageConfig {
     override fun toString(): String =
-      "MinioStorageConfig(accessKey=${accessKey.mask()}, secretAccessKey=${secretAccessKey.mask()}, endpoint=$endpoint)"
+      "MinioStorageConfig(accessKey=${accessKey.mask()}, secretAccessKey=${secretAccessKey.mask()}, endpoint=$endpoint, region=$region)"
   }
 
   /**
@@ -1065,6 +1067,7 @@ class StorageEnvironmentVariableProvider(
           put(EnvVar.AWS_ACCESS_KEY_ID.name, storageConfig.accessKey)
           put(EnvVar.AWS_SECRET_ACCESS_KEY.name, storageConfig.secretAccessKey)
           put(EnvVar.MINIO_ENDPOINT.name, storageConfig.endpoint)
+          put(EnvVar.MINIO_REGION.name, storageConfig.region)
         }
       }
       is AirbyteStorageConfig.S3StorageConfig -> {

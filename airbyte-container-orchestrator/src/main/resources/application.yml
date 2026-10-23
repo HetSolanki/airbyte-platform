@@ -75,6 +75,7 @@ airbyte:
       minio:
         access-key: ${AWS_ACCESS_KEY_ID:}
         endpoint: ${MINIO_ENDPOINT:}
+        region: ${MINIO_REGION:us-east-1}
         secret-access-key: ${AWS_SECRET_ACCESS_KEY:}
       s3:
         access-key: ${AWS_ACCESS_KEY_ID:}

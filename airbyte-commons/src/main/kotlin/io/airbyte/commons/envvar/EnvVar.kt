@@ -78,6 +78,7 @@ enum class EnvVar {
   LOG_LEVEL,
 
   MINIO_ENDPOINT,
+  MINIO_REGION,
 
   OPERATION_TYPE,
 

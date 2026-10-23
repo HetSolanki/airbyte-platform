@@ -347,6 +347,24 @@ Renders the storage.minio.endpoint environment variable
 {{- end }}
 
 {{/*
+Renders the storage.minio.region value
+*/}}
+{{- define "airbyte-data-plane.storage.minio.region" }}
+    {{- .Values.storage.minio.region | default "us-east-1" }}
+{{- end }}
+
+{{/*
+Renders the storage.minio.region environment variable
+*/}}
+{{- define "airbyte-data-plane.storage.minio.region.env" }}
+- name: MINIO_REGION
+  valueFrom:
+    configMapKeyRef:
+      name: {{ .Release.Name }}-airbyte-data-plane-env
+      key: MINIO_REGION
+{{- end }}
+
+{{/*
 Renders the storage.minio.s3PathStyleAccess value
 */}}
 {{- define "airbyte-data-plane.storage.minio.s3PathStyleAccess" }}
@@ -393,6 +411,7 @@ Renders the set of all storage environment variables
 {{- include "airbyte-data-plane.storage.minio.accessKeyId.env" . }}
 {{- include "airbyte-data-plane.storage.minio.secretAccessKey.env" . }}
 {{- include "airbyte-data-plane.storage.minio.endpoint.env" . }}
+{{- include "airbyte-data-plane.storage.minio.region.env" . }}
 {{- include "airbyte-data-plane.storage.minio.s3PathStyleAccess.env" . }}
 {{- end }}
 
@@ -426,6 +445,7 @@ GOOGLE_APPLICATION_CREDENTIALS: {{ include "airbyte-data-plane.storage.gcs.crede
 
 {{- if eq $opt "minio" }}
 MINIO_ENDPOINT: {{ include "airbyte-data-plane.storage.minio.endpoint" . | quote }}
+MINIO_REGION: {{ include "airbyte-data-plane.storage.minio.region" . | quote }}
 S3_PATH_STYLE: {{ include "airbyte-data-plane.storage.minio.s3PathStyleAccess" . | quote }}
 {{- end }}
 

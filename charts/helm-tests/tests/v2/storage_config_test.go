@@ -14,6 +14,7 @@ func TestDefaultStorageConfig(t *testing.T) {
 
 	expectedEnvVars := []helmtests.ExpectedEnvVar{
 		helmtests.ExpectedConfigMapVar().Name("MINIO_ENDPOINT").RefName("airbyte-airbyte-env").Value("http://airbyte-minio-svc.ab:9000"),
+		helmtests.ExpectedConfigMapVar().Name("MINIO_REGION").RefName("airbyte-airbyte-env").Value("us-east-1"),
 		helmtests.ExpectedConfigMapVar().Name("S3_PATH_STYLE_ACCESS").RefName("airbyte-airbyte-env").Value("true"),
 		helmtests.ExpectedConfigMapVar().Name("STORAGE_BUCKET_ACTIVITY_PAYLOAD").RefName("airbyte-airbyte-env").Value("airbyte-bucket"),
 		helmtests.ExpectedConfigMapVar().Name("STORAGE_BUCKET_LOG").RefName("airbyte-airbyte-env").Value("airbyte-bucket"),
@@ -22,6 +23,23 @@ func TestDefaultStorageConfig(t *testing.T) {
 		helmtests.ExpectedConfigMapVar().Name("STORAGE_TYPE").RefName("airbyte-airbyte-env").Name("STORAGE_TYPE").Value("minio"),
 		helmtests.ExpectedSecretVar().Name("AWS_ACCESS_KEY_ID").RefName("airbyte-airbyte-secrets").Name("AWS_ACCESS_KEY_ID").Value("minio"),
 		helmtests.ExpectedSecretVar().Name("AWS_SECRET_ACCESS_KEY").RefName("airbyte-airbyte-secrets").Value("minio123"),
+	}
+
+	releaseApps := appsForRelease("airbyte")
+	for _, name := range []string{"server", "worker", "workload-launcher"} {
+		app := releaseApps[name]
+		chartYaml.VerifyEnvVarsForApp(t, app.Kind, app.FQN(), expectedEnvVars)
+	}
+}
+
+func TestMinioRegionConfig(t *testing.T) {
+	opts := helmtests.BaseHelmOptions()
+	opts.SetValues["global.storage.minio.region"] = "us-ashburn-1"
+	chartYaml, err := helmtests.RenderHelmChart(t, opts, chartPath, "airbyte", nil)
+	assert.NoError(t, err)
+
+	expectedEnvVars := []helmtests.ExpectedEnvVar{
+		helmtests.ExpectedConfigMapVar().Name("MINIO_REGION").RefName("airbyte-airbyte-env").Value("us-ashburn-1"),
 	}
 
 	releaseApps := appsForRelease("airbyte")

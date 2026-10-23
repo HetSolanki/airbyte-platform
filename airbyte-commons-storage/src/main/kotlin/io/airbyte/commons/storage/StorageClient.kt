@@ -579,8 +579,10 @@ internal fun AirbyteStorageConfig.MinioStorageConfig.s3Client(): S3Client =
     .serviceConfiguration { it.pathStyleAccessEnabled(true) }
     .credentialsProvider { AwsBasicCredentials.create(this@s3Client.accessKey, this@s3Client.secretAccessKey) }
     .endpointOverride(URI(this@s3Client.endpoint))
-    // The region isn't actually used but is required. Set to us-east-1 based on https://github.com/minio/minio/discussions/15063.
-    .region(Region.US_EAST_1)
+    // MinIO itself ignores the region, but it is part of the request signature, so other S3-compatible
+    // stores (e.g. OCI Object Storage) reject requests signed for the wrong one. Defaults to us-east-1
+    // based on https://github.com/minio/minio/discussions/15063.
+    .region(this@s3Client.region.takeIf { it.isNotBlank() }?.let { Region.of(it) } ?: Region.US_EAST_1)
     .build()
 
 /**

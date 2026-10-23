@@ -51,6 +51,7 @@ class ProfilerContainerFactory(
         "GOOGLE_APPLICATION_CREDENTIALS",
         "AWS_ACCESS_KEY_ID",
         "MINIO_ENDPOINT",
+        "MINIO_REGION",
         "AWS_SECRET_ACCESS_KEY",
         "AWS_DEFAULT_REGION",
       )

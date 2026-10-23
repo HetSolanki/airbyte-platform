@@ -96,6 +96,7 @@ internal fun buildStorageClient(
             accessKey = storageConfig[EnvVar.AWS_ACCESS_KEY_ID]!!,
             secretAccessKey = storageConfig[EnvVar.AWS_SECRET_ACCESS_KEY]!!,
             endpoint = storageConfig[EnvVar.MINIO_ENDPOINT]!!,
+            region = storageConfig[EnvVar.MINIO_REGION] ?: "",
           ),
         type = documentType,
       )
@@ -142,4 +143,5 @@ private fun buildStorageConfig(): Map<EnvVar, String> =
     EnvVar.AWS_SECRET_ACCESS_KEY to EnvVar.AWS_SECRET_ACCESS_KEY.fetchNotNull(),
     EnvVar.AWS_DEFAULT_REGION to EnvVar.AWS_DEFAULT_REGION.fetchNotNull(),
     EnvVar.MINIO_ENDPOINT to EnvVar.MINIO_ENDPOINT.fetchNotNull(),
+    EnvVar.MINIO_REGION to EnvVar.MINIO_REGION.fetchNotNull(),
   )

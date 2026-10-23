@@ -102,6 +102,7 @@ private class AirbyteCloudStorageAppenderTest {
         EnvVar.AWS_ACCESS_KEY_ID to accessKey,
         EnvVar.AWS_SECRET_ACCESS_KEY to accessSecretKey,
         EnvVar.MINIO_ENDPOINT to endpoint,
+        EnvVar.MINIO_REGION to "us-ashburn-1",
       )
     val client = buildStorageClient(storageConfig = storageConfig, documentType = DocumentType.LOGS)
     assertEquals(MinioStorageClient::class.java, client.javaClass)
